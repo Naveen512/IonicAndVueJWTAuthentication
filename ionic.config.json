@@ -1,0 +1,7 @@
+{
+  "name": "ion-vue-jwtauth",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
