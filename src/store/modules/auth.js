@@ -56,12 +56,26 @@ const actions = {
       commit("saveAuthToken", tokenData);
     }
   },
+  async refreshToken({commit}, payload){
+    const response = await axios.post("http://localhost:3000/auth/refreshtoken", payload);
+    if (response.status == 200 || response.status == 201) {
+      await Storage.set({
+        key: "access_token",
+        value: response.data.access_token,
+      });
+      await Storage.set({
+        key: "refresh_token",
+        value: response.data.refresh_token,
+      });
+
+      commit("saveAuthToken", response.data);
+    } 
+  }
 };
 
 const mutations = {
   saveAuthToken(state, payload) {
     const jwtDecodeUserInfo = jwtDecrypt(payload.access_token);
-    console.log(jwtDecodeUserInfo);
     const newAuthData = {
       token: payload.access_token,
       refreshToken: payload.refresh_token,
