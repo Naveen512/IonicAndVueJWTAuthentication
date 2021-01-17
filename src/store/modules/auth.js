@@ -56,20 +56,17 @@ const actions = {
       commit("saveAuthToken", tokenData);
     }
   },
-  async refreshToken({commit}, payload){
-    const response = await axios.post("http://localhost:3000/auth/refreshtoken", payload);
-    if (response.status == 200 || response.status == 201) {
-      await Storage.set({
-        key: "access_token",
-        value: response.data.access_token,
-      });
-      await Storage.set({
-        key: "refresh_token",
-        value: response.data.refresh_token,
-      });
-
-      commit("saveAuthToken", response.data);
-    } 
+   
+  async saveTokensToStorage({commit}, payload){
+    await Storage.set({
+      key: "access_token",
+      value: payload.access_token,
+    });
+    await Storage.set({
+      key: "refresh_token",
+      value: payload.refresh_token,
+    });
+    commit("saveTokenData", payload);
   }
 };
 
